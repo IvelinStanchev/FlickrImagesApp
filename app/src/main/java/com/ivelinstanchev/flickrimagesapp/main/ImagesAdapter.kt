@@ -40,7 +40,7 @@ class ImagesAdapter : ListAdapter<FlickrAdapterItem, RecyclerView.ViewHolder>(Im
     class ImagesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         fun bind(image: FlickrImage) {
-            itemView.imgMainImageItem.setImageDrawable(null)
+            itemView.imgMainImageItem.setImageBitmap(null)
             itemView.imgMainImageItem.loadWebImage(image.getUrl())
         }
     }
