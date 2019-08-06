@@ -11,6 +11,8 @@ interface MainActivityContract {
         fun initImagesRecycler(images: List<FlickrImage>)
 
         fun updateImagesRecycler(images: List<FlickrImage>)
+
+        fun onImagesFetchError(throwable: Throwable)
     }
 
     interface Presenter {

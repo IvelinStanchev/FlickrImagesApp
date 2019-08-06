@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.view.Menu
 import android.widget.SearchView
+import android.widget.Toast
 import com.ivelinstanchev.flickrimagesapp.R
 import com.ivelinstanchev.flickrimagesapp.main.model.FlickrImage
 import kotlinx.android.synthetic.main.activity_main.*
@@ -44,5 +45,9 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
 
     override fun updateImagesRecycler(images: List<FlickrImage>) {
         this.imagesAdapter.submitList(images)
+    }
+
+    override fun onImagesFetchError(throwable: Throwable) {
+        Toast.makeText(this, throwable.message, Toast.LENGTH_LONG).show()
     }
 }
