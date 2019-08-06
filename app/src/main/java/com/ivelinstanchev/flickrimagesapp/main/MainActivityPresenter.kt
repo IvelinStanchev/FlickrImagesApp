@@ -11,7 +11,7 @@ class MainActivityPresenter(
 ) : MainActivityContract.Presenter {
 
     companion object {
-        private const val INITIAL_PAGE = 0
+        private const val INITIAL_PAGE = 1
     }
 
     private var page: Int = INITIAL_PAGE

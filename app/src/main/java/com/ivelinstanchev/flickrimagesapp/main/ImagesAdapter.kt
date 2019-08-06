@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ivelinstanchev.flickrimagesapp.R
+import com.ivelinstanchev.flickrimagesapp.extension.loadWebImage
 import com.ivelinstanchev.flickrimagesapp.main.model.FlickrAdapterItem
 import com.ivelinstanchev.flickrimagesapp.main.model.FlickrImage
 import com.ivelinstanchev.flickrimagesapp.main.model.ImagesDiffUtil
@@ -39,7 +40,8 @@ class ImagesAdapter : ListAdapter<FlickrAdapterItem, RecyclerView.ViewHolder>(Im
     class ImagesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         fun bind(image: FlickrImage) {
-            itemView.itemMainImageTitle.text = image.url
+            itemView.imgMainImageItem.setImageDrawable(null)
+            itemView.imgMainImageItem.loadWebImage(image.getUrl())
         }
     }
 

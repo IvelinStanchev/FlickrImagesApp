@@ -7,13 +7,14 @@
     android:layout_height="wrap_content"
     tools:context=".main.MainActivity">
     
-    <TextView
-        android:id="@+id/itemMainImageTitle"
+    <ImageView
+        android:id="@+id/imgMainImageItem"
         android:layout_width="0dp"
-        android:layout_height="100dp"
-        android:gravity="center"
+        android:layout_height="@dimen/height_main_image"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

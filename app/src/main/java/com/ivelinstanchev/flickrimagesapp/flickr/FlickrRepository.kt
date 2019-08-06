@@ -2,6 +2,8 @@ package com.ivelinstanchev.flickrimagesapp.flickr
 
 import com.ivelinstanchev.flickrimagesapp.listener.GeneralResponseListener
 import com.ivelinstanchev.flickrimagesapp.main.model.FlickrImage
+import com.ivelinstanchev.flickrimagesapp.main.model.FlickrImageApiResponse
+import com.ivelinstanchev.flickrimagesapp.main.model.toDisplay
 
 object FlickrRepository {
 
@@ -12,6 +14,15 @@ object FlickrRepository {
     fun fetchImages(page: Int,
                     searchQuery: String,
                     responseListener: GeneralResponseListener<List<FlickrImage>>) {
-        apiService.fetchImages(page, searchQuery, responseListener)
+        apiService.fetchImages(page, searchQuery, object : GeneralResponseListener<List<FlickrImageApiResponse>> {
+            override fun onSuccess(response: List<FlickrImageApiResponse>) {
+                val convertedList = response.map { it.toDisplay() }
+                responseListener.onSuccess(convertedList)
+            }
+
+            override fun onError(error: Throwable) {
+                responseListener.onError(error)
+            }
+        })
     }
 }
