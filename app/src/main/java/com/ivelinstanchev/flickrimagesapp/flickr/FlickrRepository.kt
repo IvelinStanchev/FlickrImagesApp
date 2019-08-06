@@ -9,7 +9,9 @@ object FlickrRepository {
         FlickrApiService()
     }
 
-    fun fetchImages(page: Int, responseListener: GeneralResponseListener<List<FlickrImage>>) {
-        apiService.fetchImages(page, responseListener)
+    fun fetchImages(page: Int,
+                    searchQuery: String,
+                    responseListener: GeneralResponseListener<List<FlickrImage>>) {
+        apiService.fetchImages(page, searchQuery, responseListener)
     }
 }

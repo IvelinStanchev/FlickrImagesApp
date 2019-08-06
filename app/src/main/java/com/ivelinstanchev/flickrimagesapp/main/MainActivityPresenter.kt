@@ -8,20 +8,38 @@ class MainActivityPresenter(
     private val view: MainActivityContract.View
 ) : MainActivityContract.Presenter {
 
-    private var page: Int = 0
+    companion object {
+        private const val INITIAL_PAGE = 0
+    }
+
+    private var page: Int = INITIAL_PAGE
+    private var lastSearchQuery: String? = null
+    private var imagesList: MutableList<FlickrImage> = mutableListOf()
 
     init {
         view.setPresenter(this)
     }
 
-    override fun fetchImages() {
+    override fun submitSearchQuery(searchQuery: String?) {
+        if (searchQuery == null) {
+            return
+        }
 
-        FlickrRepository.fetchImages(page, object : GeneralResponseListener<List<FlickrImage>> {
+        if (lastSearchQuery == searchQuery) {
+            page++
+        } else {
+            lastSearchQuery = searchQuery
+            resetData()
+        }
+
+        FlickrRepository.fetchImages(page, searchQuery, object : GeneralResponseListener<List<FlickrImage>> {
             override fun onSuccess(response: List<FlickrImage>) {
-                if (page == 0) {
-                    view.initImagesRecycler(response)
+                imagesList.addAll(response)
+
+                if (page == INITIAL_PAGE) {
+                    view.initImagesRecycler(imagesList)
                 } else {
-                    view.updateImagesRecycler(response)
+                    view.updateImagesRecycler(imagesList)
                 }
             }
 
@@ -29,5 +47,10 @@ class MainActivityPresenter(
                 view.onImagesFetchError(error)
             }
         })
+    }
+
+    private fun resetData() {
+        page = INITIAL_PAGE
+        imagesList.clear()
     }
 }

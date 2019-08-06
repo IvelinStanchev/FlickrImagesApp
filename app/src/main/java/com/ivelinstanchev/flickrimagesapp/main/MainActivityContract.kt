@@ -17,6 +17,6 @@ interface MainActivityContract {
 
     interface Presenter {
 
-        fun fetchImages()
+        fun submitSearchQuery(searchQuery: String?)
     }
 }

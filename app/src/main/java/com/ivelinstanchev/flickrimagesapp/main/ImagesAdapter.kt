@@ -10,19 +10,14 @@ import com.ivelinstanchev.flickrimagesapp.R
 import com.ivelinstanchev.flickrimagesapp.main.model.FlickrImage
 import kotlinx.android.synthetic.main.item_main_image.view.*
 
-class ImagesAdapter(private val images: List<FlickrImage>)
-    : ListAdapter<FlickrImage, ImagesAdapter.ImagesViewHolder>(ImagesDiffUtil) {
+class ImagesAdapter : ListAdapter<FlickrImage, ImagesAdapter.ImagesViewHolder>(ImagesDiffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImagesViewHolder {
         return ImagesViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_main_image, parent, false))
     }
 
-    override fun getItemCount(): Int {
-        return images.size
-    }
-
     override fun onBindViewHolder(viewHolder: ImagesViewHolder, position: Int) {
-        viewHolder.bind(images[position])
+        viewHolder.bind(getItem(position))
     }
 
     class ImagesViewHolder(view: View) : RecyclerView.ViewHolder(view) {

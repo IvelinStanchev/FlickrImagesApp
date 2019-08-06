@@ -1,7 +1,7 @@
 package com.ivelinstanchev.flickrimagesapp.main
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.view.Menu
 import android.widget.SearchView
@@ -21,14 +21,15 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         setContentView(R.layout.activity_main)
 
         MainActivityPresenter(this)
-
-        presenter.fetchImages()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         val searchView: SearchView? = menu?.findItem(R.id.menuItemMainSearch)?.actionView as? SearchView
         searchView?.maxWidth = Int.MAX_VALUE // making search view full width
+
+        addSearchViewListener(searchView)
+
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -39,8 +40,9 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     override fun initImagesRecycler(images: List<FlickrImage>) {
         recyclerMainImages.layoutManager =
             GridLayoutManager(this, resources.getInteger(R.integer.main_recycler_images_grid_count))
-        this.imagesAdapter = ImagesAdapter(images)
+        this.imagesAdapter = ImagesAdapter()
         recyclerMainImages.adapter = this.imagesAdapter
+        this.imagesAdapter.submitList(images)
     }
 
     override fun updateImagesRecycler(images: List<FlickrImage>) {
@@ -49,5 +51,18 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
 
     override fun onImagesFetchError(throwable: Throwable) {
         Toast.makeText(this, throwable.message, Toast.LENGTH_LONG).show()
+    }
+
+    private fun addSearchViewListener(searchView: SearchView?) {
+        searchView?.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                presenter.submitSearchQuery(query)
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                return false
+            }
+        })
     }
 }
