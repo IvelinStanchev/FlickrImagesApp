@@ -1,6 +1,6 @@
 package com.ivelinstanchev.flickrimagesapp.main
 
-import com.ivelinstanchev.flickrimagesapp.main.model.FlickrImage
+import com.ivelinstanchev.flickrimagesapp.main.model.FlickrAdapterItem
 
 interface MainActivityContract {
 
@@ -8,14 +8,20 @@ interface MainActivityContract {
 
         fun setPresenter(presenter: Presenter)
 
-        fun initImagesRecycler(images: List<FlickrImage>)
+        fun initImagesRecycler(images: List<FlickrAdapterItem>)
 
-        fun updateImagesRecycler(images: List<FlickrImage>)
+        fun updateImagesRecycler(images: List<FlickrAdapterItem>)
 
         fun onImagesFetchError(throwable: Throwable)
+
+        fun showMainLoading()
+
+        fun hideMainLoading()
     }
 
     interface Presenter {
+
+        fun onRecyclerScrolledToBottom()
 
         fun submitSearchQuery(searchQuery: String?)
     }

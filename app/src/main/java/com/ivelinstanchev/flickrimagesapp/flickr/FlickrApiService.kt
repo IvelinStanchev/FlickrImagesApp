@@ -1,5 +1,6 @@
 package com.ivelinstanchev.flickrimagesapp.flickr
 
+import android.os.Handler
 import com.ivelinstanchev.flickrimagesapp.listener.GeneralResponseListener
 import com.ivelinstanchev.flickrimagesapp.main.model.FlickrImage
 
@@ -17,6 +18,8 @@ class FlickrApiService {
             images.add(FlickrImage(i.toString(), "URL$i"))
         }
 
-        responseListener.onSuccess(images)
+        Handler().postDelayed({
+            responseListener.onSuccess(images)
+        }, 2000)
     }
 }
