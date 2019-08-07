@@ -15,17 +15,17 @@ class FlickrApiService {
         private const val RECORDS_PER_PAGE = 30
     }
 
-    private fun buildImagesFetchUrl(page: Int, searchQuery: String): String {
-        return "https://api.flickr.com/services/rest/?method=flickr.photos.getRecent&api_key=${BuildConfig.API_KEY}" +
-                "&format=json&nojsoncallback=1&safe_search=1&text=$searchQuery&page=$page&per_page=$RECORDS_PER_PAGE"
-    }
-
     fun fetchImages(page: Int,
                     searchQuery: String,
                     responseListener: GeneralResponseListener<List<FlickrImageApiResponse>>) {
         val url = buildImagesFetchUrl(page, searchQuery)
 
         DownloadImagesInfoAsyncTask(responseListener).execute(url)
+    }
+
+    private fun buildImagesFetchUrl(page: Int, searchQuery: String): String {
+        return "https://api.flickr.com/services/rest/?method=flickr.photos.getRecent&api_key=${BuildConfig.API_KEY}" +
+                "&format=json&nojsoncallback=1&safe_search=1&text=$searchQuery&page=$page&per_page=$RECORDS_PER_PAGE"
     }
 
     private class DownloadImagesInfoAsyncTask(

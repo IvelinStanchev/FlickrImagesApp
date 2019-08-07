@@ -32,7 +32,7 @@ class MainActivityPresenter(
     }
 
     override fun submitSearchQuery(searchQuery: String?) {
-        if (searchQuery == null || searchQuery == lastSearchQuery) {
+        if (searchQuery.isNullOrEmpty() || searchQuery == lastSearchQuery) {
             return
         }
 

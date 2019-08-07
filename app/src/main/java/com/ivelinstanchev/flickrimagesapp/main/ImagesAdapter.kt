@@ -9,7 +9,7 @@ import com.ivelinstanchev.flickrimagesapp.R
 import com.ivelinstanchev.flickrimagesapp.main.model.FlickrAdapterItem
 import com.ivelinstanchev.flickrimagesapp.main.model.FlickrImage
 import com.ivelinstanchev.flickrimagesapp.main.model.ImagesDiffUtil
-import com.ivelinstanchev.flickrimagesapp.utils.ImageDownloader
+import com.ivelinstanchev.flickrimagesapp.util.ImageDownloader
 import kotlinx.android.synthetic.main.item_main_image.view.*
 import java.util.*
 import kotlin.collections.ArrayList

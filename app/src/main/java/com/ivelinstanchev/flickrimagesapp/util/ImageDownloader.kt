@@ -1,4 +1,4 @@
-package com.ivelinstanchev.flickrimagesapp.utils
+package com.ivelinstanchev.flickrimagesapp.util
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
