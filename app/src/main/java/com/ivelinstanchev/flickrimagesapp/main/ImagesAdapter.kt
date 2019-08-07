@@ -6,18 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ivelinstanchev.flickrimagesapp.R
-import com.ivelinstanchev.flickrimagesapp.extension.loadWebImage
 import com.ivelinstanchev.flickrimagesapp.main.model.FlickrAdapterItem
 import com.ivelinstanchev.flickrimagesapp.main.model.FlickrImage
 import com.ivelinstanchev.flickrimagesapp.main.model.ImagesDiffUtil
+import com.ivelinstanchev.flickrimagesapp.utils.ImageDownloader
 import kotlinx.android.synthetic.main.item_main_image.view.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ImagesAdapter : ListAdapter<FlickrAdapterItem, RecyclerView.ViewHolder>(ImagesDiffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             FlickrAdapterItem.ITEM_FLICKR_IMAGE ->
-                ImagesViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_main_image, parent, false))
+                ImagesViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_main_image, parent, false),
+                    UUID.randomUUID().toString())
             else ->
                 LoadingViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_loading, parent, false))
         }
@@ -37,11 +40,11 @@ class ImagesAdapter : ListAdapter<FlickrAdapterItem, RecyclerView.ViewHolder>(Im
         super.submitList(ArrayList(list)) // should always submit new list because this is how diff util works
     }
 
-    class ImagesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ImagesViewHolder(view: View, private val uniqueHolderId: String) : RecyclerView.ViewHolder(view) {
 
         fun bind(image: FlickrImage) {
-            itemView.imgMainImageItem.setImageBitmap(null)
-            itemView.imgMainImageItem.loadWebImage(image.getUrl())
+            itemView.imgMainImageItem.setImageBitmap(null) // refresh view holder image before loading new one
+            ImageDownloader.loadWebImage(itemView.imgMainImageItem, image.getUrl(), uniqueHolderId)
         }
     }
 
