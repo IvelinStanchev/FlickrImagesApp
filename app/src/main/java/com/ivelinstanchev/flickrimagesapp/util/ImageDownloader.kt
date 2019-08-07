@@ -10,6 +10,9 @@ import com.ivelinstanchev.flickrimagesapp.cache.ImageCache
 import com.ivelinstanchev.flickrimagesapp.listener.GeneralResponseListener
 import java.net.URL
 
+/**
+ * Responsible for loading remote image into ImageView and downloading only latest requested URL
+ */
 object ImageDownloader {
 
     private val downloadTasks: HashMap<String, AsyncTask<*, *, *>> = hashMapOf()
@@ -19,11 +22,13 @@ object ImageDownloader {
                      uniqueId: String,
                      @DrawableRes errorImagePlaceholder: Int = R.drawable.ic_image_load_error_placeholder) {
         if (downloadTasks.containsKey(uniqueId)) {
+            // Task was already executed for this id -> cancel it
             downloadTasks[uniqueId]?.cancel(false)
         }
 
         val bitmapCache = ImageCache.getBitmap(url)
         if (bitmapCache != null) {
+            // Load image from cache
             imageView.setImageBitmap(bitmapCache)
             return
         }

@@ -3,6 +3,10 @@ package com.ivelinstanchev.flickrimagesapp.cache
 import android.graphics.Bitmap
 import android.util.LruCache
 
+/**
+ * Memory cache for bitmaps. URLs will be mapped to downloaded bitmaps and bitmaps can be retrieved from specified URL.
+ * The cache has max memory limitation which is 1/8th of the available memory.
+ */
 object ImageCache {
 
     private var memoryCache: LruCache<String, Bitmap>

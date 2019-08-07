@@ -37,13 +37,15 @@ class ImagesAdapter : ListAdapter<FlickrAdapterItem, RecyclerView.ViewHolder>(Im
     }
 
     override fun submitList(list: List<FlickrAdapterItem>?) {
-        super.submitList(ArrayList(list)) // should always submit new list because this is how diff util works
+        // Should always submit new list because this is how diff util works
+        super.submitList(ArrayList(list))
     }
 
     class ImagesViewHolder(view: View, private val uniqueHolderId: String) : RecyclerView.ViewHolder(view) {
 
         fun bind(image: FlickrImage) {
-            itemView.imgMainImageItem.setImageBitmap(null) // refresh view holder image before loading new one
+            // Refresh view holder image before loading new one
+            itemView.imgMainImageItem.setImageBitmap(null)
             ImageDownloader.loadWebImage(itemView.imgMainImageItem, image.getUrl(), uniqueHolderId)
         }
     }

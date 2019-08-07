@@ -3,6 +3,9 @@ package com.ivelinstanchev.flickrimagesapp.scrolling
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 
+/**
+ * Managing scrolling state and checks if fetching new items is needed
+ */
 class RecyclerEndlessScrollingManager(private val visibleThreshold: Int,
                                       private val fetchFunc: () -> Unit) {
 

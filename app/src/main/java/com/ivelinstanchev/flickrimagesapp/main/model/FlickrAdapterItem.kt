@@ -2,6 +2,9 @@ package com.ivelinstanchev.flickrimagesapp.main.model
 
 import android.support.v7.util.DiffUtil
 
+/**
+ * Used to mark Flickr images adapter items
+ */
 interface FlickrAdapterItem {
 
     companion object {
