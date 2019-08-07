@@ -7,7 +7,8 @@ import com.ivelinstanchev.flickrimagesapp.main.model.FlickrImage
 import com.ivelinstanchev.flickrimagesapp.main.model.FlickrImageLoading
 
 class MainActivityPresenter(
-    private val view: MainActivityContract.View
+    private val view: MainActivityContract.View,
+    private val flickrRepository: FlickrRepository
 ) : MainActivityContract.Presenter {
 
     companion object {
@@ -42,7 +43,7 @@ class MainActivityPresenter(
     }
 
     private fun fetchData(page: Int, searchQuery: String) {
-        FlickrRepository.fetchImages(page, searchQuery, object : GeneralResponseListener<List<FlickrImage>> {
+        flickrRepository.fetchImages(page, searchQuery, object : GeneralResponseListener<List<FlickrImage>> {
             override fun onSuccess(response: List<FlickrImage>) {
 
                 if (page == INITIAL_PAGE) {

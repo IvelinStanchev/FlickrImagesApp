@@ -5,11 +5,7 @@ import com.ivelinstanchev.flickrimagesapp.main.model.FlickrImage
 import com.ivelinstanchev.flickrimagesapp.main.model.FlickrImageApiResponse
 import com.ivelinstanchev.flickrimagesapp.main.model.toDisplay
 
-object FlickrRepository {
-
-    private val apiService: FlickrApiService by lazy {
-        FlickrApiService()
-    }
+class FlickrRepository(private val apiService: FlickrApiService) {
 
     fun fetchImages(page: Int,
                     searchQuery: String,

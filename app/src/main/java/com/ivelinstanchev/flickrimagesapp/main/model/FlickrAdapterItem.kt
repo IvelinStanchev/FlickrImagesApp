@@ -10,7 +10,9 @@ interface FlickrAdapterItem {
     }
 
     fun getItemViewType(): Int
+
     fun isSameAs(other: FlickrAdapterItem): Boolean
+
     fun isContentEqualTo(other: FlickrAdapterItem): Boolean
 }
 

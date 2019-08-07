@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.SearchView
 import android.widget.Toast
 import com.ivelinstanchev.flickrimagesapp.R
+import com.ivelinstanchev.flickrimagesapp.di.Injector
 import com.ivelinstanchev.flickrimagesapp.main.model.FlickrAdapterItem
 import com.ivelinstanchev.flickrimagesapp.scrolling.RecyclerEndlessScrollingManager
 import kotlinx.android.synthetic.main.activity_main.*
@@ -27,7 +28,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         title = null
         setContentView(R.layout.activity_main)
 
-        MainActivityPresenter(this)
+        MainActivityPresenter(this, Injector.provideFlickrRepository())
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
