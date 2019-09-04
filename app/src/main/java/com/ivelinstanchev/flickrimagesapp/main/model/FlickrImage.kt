@@ -7,7 +7,8 @@ data class FlickrImage(
     val title: String,
     val farm: Int,
     val server: String,
-    val secret: String) : FlickrAdapterItem {
+    val secret: String
+) : FlickrAdapterItem {
 
     override fun getItemViewType() = FlickrAdapterItem.ITEM_FLICKR_IMAGE
 

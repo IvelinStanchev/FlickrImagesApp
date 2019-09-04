@@ -1,5 +1,6 @@
 package com.ivelinstanchev.flickrimagesapp.main
 
+import com.ivelinstanchev.flickrimagesapp.error.GeneralResponseError
 import com.ivelinstanchev.flickrimagesapp.flickr.FlickrRepository
 import com.ivelinstanchev.flickrimagesapp.listener.GeneralResponseListener
 import com.ivelinstanchev.flickrimagesapp.main.model.FlickrAdapterItem
@@ -103,7 +104,7 @@ class MainActivityPresenterTest {
         val inOrder = inOrder(mainActivityView)
         inOrder.verify(mainActivityView).showMainLoading()
 
-        val error = Throwable()
+        val error = GeneralResponseError
         flickrImageCallbackCaptor.value.onError(error)
 
         inOrder.verify(mainActivityView).hideMainLoading()
@@ -154,7 +155,7 @@ class MainActivityPresenterTest {
 
         verifyFetchImages(SECOND_PAGE, searchQuery)
 
-        val error = Throwable()
+        val error = GeneralResponseError
         flickrImageCallbackCaptor.value.onError(error)
 
         inOrder.verify(mainActivityView).updateImagesRecycler(FLICKR_IMAGES_LIST_PAGE_1)

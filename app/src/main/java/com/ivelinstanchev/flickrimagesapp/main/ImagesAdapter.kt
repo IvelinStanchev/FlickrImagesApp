@@ -11,18 +11,31 @@ import com.ivelinstanchev.flickrimagesapp.main.model.FlickrImage
 import com.ivelinstanchev.flickrimagesapp.main.model.ImagesDiffUtil
 import com.ivelinstanchev.flickrimagesapp.util.ImageDownloader
 import kotlinx.android.synthetic.main.item_main_image.view.*
+import java.lang.ref.WeakReference
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ImagesAdapter : ListAdapter<FlickrAdapterItem, RecyclerView.ViewHolder>(ImagesDiffUtil) {
+class ImagesAdapter(private val imageDownloader: ImageDownloader) :
+    ListAdapter<FlickrAdapterItem, RecyclerView.ViewHolder>(ImagesDiffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            FlickrAdapterItem.ITEM_FLICKR_IMAGE ->
-                ImagesViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_main_image, parent, false),
-                    UUID.randomUUID().toString())
-            else ->
-                LoadingViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_loading, parent, false))
+            FlickrAdapterItem.ITEM_FLICKR_IMAGE -> ImagesViewHolder(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.item_main_image,
+                    parent,
+                    false
+                ),
+                UUID.randomUUID().toString(),
+                imageDownloader
+            )
+            else -> LoadingViewHolder(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.item_loading,
+                    parent,
+                    false
+                )
+            )
         }
     }
 
@@ -41,14 +54,22 @@ class ImagesAdapter : ListAdapter<FlickrAdapterItem, RecyclerView.ViewHolder>(Im
         super.submitList(ArrayList(list))
     }
 
-    class ImagesViewHolder(view: View, private val uniqueHolderId: String) : RecyclerView.ViewHolder(view) {
+    inner class ImagesViewHolder(
+        view: View,
+        private val uniqueHolderId: String,
+        private val imageDownloader: ImageDownloader
+    ) : RecyclerView.ViewHolder(view) {
 
         fun bind(image: FlickrImage) {
             // Refresh view holder image before loading new one
             itemView.imgMainImageItem.setImageBitmap(null)
-            ImageDownloader.loadWebImage(itemView.imgMainImageItem, image.getUrl(), uniqueHolderId)
+            imageDownloader.loadWebImage(
+                WeakReference(itemView.imgMainImageItem),
+                image.getUrl(),
+                uniqueHolderId
+            )
         }
     }
 
-    class LoadingViewHolder(view: View) : RecyclerView.ViewHolder(view)
+    inner class LoadingViewHolder(view: View) : RecyclerView.ViewHolder(view)
 }

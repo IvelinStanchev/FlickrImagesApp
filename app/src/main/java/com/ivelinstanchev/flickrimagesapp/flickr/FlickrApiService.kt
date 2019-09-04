@@ -2,6 +2,7 @@ package com.ivelinstanchev.flickrimagesapp.flickr
 
 import android.os.AsyncTask
 import com.ivelinstanchev.flickrimagesapp.BuildConfig
+import com.ivelinstanchev.flickrimagesapp.error.GeneralResponseError
 import com.ivelinstanchev.flickrimagesapp.flickr.model.RecentImagesResponse
 import com.ivelinstanchev.flickrimagesapp.listener.GeneralResponseListener
 import com.ivelinstanchev.flickrimagesapp.main.model.FlickrImageApiResponse
@@ -15,9 +16,11 @@ class FlickrApiService {
         private const val RECORDS_PER_PAGE = 30
     }
 
-    fun fetchImages(page: Int,
-                    searchQuery: String,
-                    responseListener: GeneralResponseListener<List<FlickrImageApiResponse>>) {
+    fun fetchImages(
+        page: Int,
+        searchQuery: String,
+        responseListener: GeneralResponseListener<List<FlickrImageApiResponse>>
+    ) {
         val url = buildImagesFetchUrl(page, searchQuery)
 
         DownloadImagesInfoAsyncTask(responseListener).execute(url)
@@ -29,8 +32,8 @@ class FlickrApiService {
     }
 
     private class DownloadImagesInfoAsyncTask(
-        private val responseListener: GeneralResponseListener<List<FlickrImageApiResponse>>)
-        : AsyncTask<String, Void, List<FlickrImageApiResponse>?>() {
+        private val responseListener: GeneralResponseListener<List<FlickrImageApiResponse>>
+    ) : AsyncTask<String, Void, List<FlickrImageApiResponse>?>() {
 
         override fun doInBackground(vararg params: String?): List<FlickrImageApiResponse>? {
             val urlPath = params[0]
@@ -40,7 +43,8 @@ class FlickrApiService {
                 val url = URL(urlPath)
                 urlConnection = url.openConnection() as HttpURLConnection
 
-                val response = urlConnection.inputStream.bufferedReader().use(BufferedReader::readText)
+                val response =
+                    urlConnection.inputStream.bufferedReader().use(BufferedReader::readText)
                 return parseJsonResponse(response)
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -53,10 +57,11 @@ class FlickrApiService {
 
         override fun onPostExecute(result: List<FlickrImageApiResponse>?) {
             super.onPostExecute(result)
+            
             if (result != null) {
                 responseListener.onSuccess(result)
             } else {
-                responseListener.onError(Throwable())
+                responseListener.onError(GeneralResponseError)
             }
         }
 

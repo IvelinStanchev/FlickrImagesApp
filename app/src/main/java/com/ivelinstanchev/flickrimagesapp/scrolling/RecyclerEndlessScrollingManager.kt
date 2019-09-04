@@ -6,8 +6,10 @@ import android.support.v7.widget.RecyclerView
 /**
  * Managing scrolling state and checks if fetching new items is needed
  */
-class RecyclerEndlessScrollingManager(private val visibleThreshold: Int,
-                                      private val fetchFunc: () -> Unit) {
+class RecyclerEndlessScrollingManager(
+    private val visibleThreshold: Int,
+    private val fetchFunc: () -> Unit
+) {
 
     private var isLoading = true
     private var firstVisibleItemPosition = 0
@@ -40,7 +42,8 @@ class RecyclerEndlessScrollingManager(private val visibleThreshold: Int,
                         }
                     }
                     if (!isLoading &&
-                        totalItemsCount - visibleItemsCount <= firstVisibleItemPosition + visibleThreshold) {
+                        totalItemsCount - visibleItemsCount <= firstVisibleItemPosition + visibleThreshold
+                    ) {
                         isLoading = true
                         fetchFunc.invoke()
                     }

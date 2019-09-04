@@ -9,6 +9,7 @@ import android.widget.SearchView
 import android.widget.Toast
 import com.ivelinstanchev.flickrimagesapp.R
 import com.ivelinstanchev.flickrimagesapp.di.Injector
+import com.ivelinstanchev.flickrimagesapp.error.ErrorResponse
 import com.ivelinstanchev.flickrimagesapp.main.model.FlickrAdapterItem
 import com.ivelinstanchev.flickrimagesapp.scrolling.RecyclerEndlessScrollingManager
 import kotlinx.android.synthetic.main.activity_main.*
@@ -21,7 +22,9 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
 
     private lateinit var presenter: MainActivityContract.Presenter
     private lateinit var imagesAdapter: ImagesAdapter
-    private val scrollManager = RecyclerEndlessScrollingManager(SCROLL_THRESHOLD) { presenter.onRecyclerScrolledToBottom() }
+    private val scrollManager = RecyclerEndlessScrollingManager(SCROLL_THRESHOLD) {
+        presenter.onRecyclerScrolledToBottom()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +36,8 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
-        val searchView: SearchView? = menu?.findItem(R.id.menuItemMainSearch)?.actionView as? SearchView
+        val searchView: SearchView? =
+            menu?.findItem(R.id.menuItemMainSearch)?.actionView as? SearchView
         searchView?.maxWidth = Int.MAX_VALUE // making search view full width
 
         addSearchViewListener(searchView)
@@ -46,10 +50,14 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     }
 
     override fun initImagesRecycler(images: List<FlickrAdapterItem>) {
+        val imageDownloader = Injector.provideImageDownloader()
+        lifecycle.addObserver(imageDownloader)
+        this.imagesAdapter = ImagesAdapter(imageDownloader)
+
         recyclerMainImages.layoutManager =
             GridLayoutManager(this, resources.getInteger(R.integer.main_recycler_images_grid_count))
-        this.imagesAdapter = ImagesAdapter()
         recyclerMainImages.adapter = this.imagesAdapter
+
         this.imagesAdapter.submitList(images)
         recyclerMainImages.clearOnScrollListeners()
         recyclerMainImages.addOnScrollListener(scrollManager.getOnScrollListener())
@@ -59,8 +67,8 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
         this.imagesAdapter.submitList(images)
     }
 
-    override fun onImagesFetchError(throwable: Throwable) {
-        Toast.makeText(this, throwable.message, Toast.LENGTH_LONG).show()
+    override fun onImagesFetchError(errorResponse: ErrorResponse) {
+        Toast.makeText(this, getString(errorResponse.messageResId), Toast.LENGTH_LONG).show()
     }
 
     override fun showMainLoading() {
@@ -74,7 +82,7 @@ class MainActivity : AppCompatActivity(), MainActivityContract.View {
     }
 
     private fun addSearchViewListener(searchView: SearchView?) {
-        searchView?.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 scrollManager.reset()
                 presenter.submitSearchQuery(query)

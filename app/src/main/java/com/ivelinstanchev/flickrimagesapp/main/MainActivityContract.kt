@@ -1,5 +1,6 @@
 package com.ivelinstanchev.flickrimagesapp.main
 
+import com.ivelinstanchev.flickrimagesapp.error.ErrorResponse
 import com.ivelinstanchev.flickrimagesapp.main.model.FlickrAdapterItem
 
 interface MainActivityContract {
@@ -12,7 +13,7 @@ interface MainActivityContract {
 
         fun updateImagesRecycler(images: List<FlickrAdapterItem>)
 
-        fun onImagesFetchError(throwable: Throwable)
+        fun onImagesFetchError(errorResponse: ErrorResponse)
 
         fun showMainLoading()
 

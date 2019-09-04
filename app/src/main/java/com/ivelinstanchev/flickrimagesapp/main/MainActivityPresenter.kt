@@ -1,5 +1,6 @@
 package com.ivelinstanchev.flickrimagesapp.main
 
+import com.ivelinstanchev.flickrimagesapp.error.ErrorResponse
 import com.ivelinstanchev.flickrimagesapp.flickr.FlickrRepository
 import com.ivelinstanchev.flickrimagesapp.listener.GeneralResponseListener
 import com.ivelinstanchev.flickrimagesapp.main.model.FlickrAdapterItem
@@ -43,39 +44,43 @@ class MainActivityPresenter(
     }
 
     private fun fetchData(page: Int, searchQuery: String) {
-        flickrRepository.fetchImages(page, searchQuery, object : GeneralResponseListener<List<FlickrImage>> {
-            override fun onSuccess(response: List<FlickrImage>) {
+        flickrRepository.fetchImages(
+            page,
+            searchQuery,
+            object : GeneralResponseListener<List<FlickrImage>> {
+                override fun onSuccess(response: List<FlickrImage>) {
 
-                if (page == INITIAL_PAGE) {
-                    view.hideMainLoading()
-                } else {
-                    removeLoadingItem()
+                    if (page == INITIAL_PAGE) {
+                        view.hideMainLoading()
+                    } else {
+                        removeLoadingItem()
+                    }
+
+                    imagesList.addAll(response)
+
+                    if (page == INITIAL_PAGE) {
+                        view.initImagesRecycler(imagesList)
+                    } else {
+                        view.updateImagesRecycler(imagesList)
+                    }
                 }
 
-                imagesList.addAll(response)
+                override fun onError(errorResponse: ErrorResponse) {
+                    if (page == INITIAL_PAGE) {
+                        view.hideMainLoading()
+                    } else {
+                        removeLoadingItemAndSubmit()
+                    }
 
-                if (page == INITIAL_PAGE) {
-                    view.initImagesRecycler(imagesList)
-                } else {
-                    view.updateImagesRecycler(imagesList)
+                    view.onImagesFetchError(errorResponse)
                 }
-            }
-
-            override fun onError(error: Throwable) {
-                if (page == INITIAL_PAGE) {
-                    view.hideMainLoading()
-                } else {
-                    removeLoadingItemAndSubmit()
-                }
-
-                view.onImagesFetchError(error)
-            }
-        })
+            })
     }
 
     private fun addLoadingItemAndSubmit() {
         if (imagesList.isNotEmpty() &&
-            imagesList.last() !is FlickrImageLoading) {
+            imagesList.last() !is FlickrImageLoading
+        ) {
             imagesList.add(FlickrImageLoading)
 
             view.updateImagesRecycler(imagesList)
@@ -84,7 +89,8 @@ class MainActivityPresenter(
 
     private fun removeLoadingItem(): Boolean {
         if (imagesList.isNotEmpty() &&
-            imagesList.last() is FlickrImageLoading) {
+            imagesList.last() is FlickrImageLoading
+        ) {
             imagesList.removeAt(imagesList.size - 1)
             return true
         }

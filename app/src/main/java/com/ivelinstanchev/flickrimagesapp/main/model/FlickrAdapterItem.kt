@@ -25,7 +25,10 @@ object ImagesDiffUtil : DiffUtil.ItemCallback<FlickrAdapterItem>() {
         return oldItem.isSameAs(newItem)
     }
 
-    override fun areContentsTheSame(oldItem: FlickrAdapterItem, newItem: FlickrAdapterItem): Boolean {
+    override fun areContentsTheSame(
+        oldItem: FlickrAdapterItem,
+        newItem: FlickrAdapterItem
+    ): Boolean {
         return oldItem.isContentEqualTo(newItem)
     }
 }

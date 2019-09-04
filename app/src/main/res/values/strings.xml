@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">FlickrImagesApp</string>
     <string name="menu_main_search_title">Search</string>
+    <string name="all_response_general_error">There was an error while trying to fetch data.</string>
 </resources>
